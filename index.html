@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -78,17 +77,14 @@
 
     <!-- Логика взаимодействия с Telegram -->
     <script>
-        // Инициализируем Telegram WebApp
         const tg = window.Telegram.WebApp;
-        tg.expand(); // Расширяем окно на весь экран смартфона
-
-        // Настраиваем цвета кнопок под тему Telegram пользователя
+        tg.expand();
         tg.ready();
 
         function sendSearch() {
-            const query = document.getElementById('searchQuery').value.strip();
+            // ИСПРАВЛЕНО: .trim() вместо .strip()
+            const query = document.getElementById('searchQuery').value.trim();
             if (query) {
-                // Отправляем структурированные данные обратно боту
                 tg.sendData(`search_${query}`);
             } else {
                 tg.showAlert("Введите название товара для поиска!");
@@ -96,12 +92,10 @@
         }
 
         function sendCalc(ttkName) {
-            // Отправляем команду расчета ТТК обратно боту
             tg.sendData(`calc_${ttkName}`);
         }
 
         function sendCommand(command) {
-            // Отправляем общую команду
             tg.sendData(command);
         }
     </script>
