@@ -1,0 +1,109 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Управление ценами и ТТК</title>
+    <!-- Подключаем Telegram WebApp SDK -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <!-- Подключаем Tailwind CSS для красивого дизайна -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: var(--tg-theme-bg-color, #18181b);
+            color: var(--tg-theme-text-color, #f4f4f5);
+        }
+    </style>
+</head>
+<body class="p-4 font-sans select-none">
+
+    <!-- Заголовок -->
+    <div class="text-center mb-6">
+        <h1 class="text-2xl font-bold text-amber-500">Учет цен и ТТК 📊</h1>
+        <p class="text-xs text-gray-400 mt-1">Интерактивный пульт управления</p>
+    </div>
+
+    <!-- БЛОК 1: Быстрый поиск цен -->
+    <div class="bg-zinc-800 rounded-xl p-4 mb-6 border border-zinc-700 shadow-lg">
+        <h2 class="text-sm font-semibold mb-3 text-zinc-300">🔍 Быстрый поиск цен</h2>
+        <div class="flex gap-2">
+            <input type="text" id="searchQuery" placeholder="Например: Мука" 
+                   class="flex-1 px-3 py-2 bg-zinc-900 border border-zinc-600 rounded-lg text-sm text-white focus:outline-none focus:border-amber-500">
+            <button onclick="sendSearch()" 
+                    class="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-black font-bold text-sm rounded-lg transition-colors">
+                Искать
+            </button>
+        </div>
+    </div>
+
+    <!-- БЛОК 2: Быстрая калькуляция ТТК -->
+    <div class="mb-6">
+        <h2 class="text-sm font-semibold mb-3 text-zinc-300">🧮 Быстрый расчет себестоимости ТТК</h2>
+        <div class="grid grid-cols-2 gap-3">
+            <!-- Кнопка 1 -->
+            <button onclick="sendCalc('Пепперони')" 
+                    class="p-3 bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 rounded-xl text-center transition-transform active:scale-95 shadow-md">
+                <span class="text-2xl block mb-1">🍕</span>
+                <span class="text-xs font-medium">Пепперони</span>
+            </button>
+            <!-- Кнопка 2 -->
+            <button onclick="sendCalc('Ветчина сыр')" 
+                    class="p-3 bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 rounded-xl text-center transition-transform active:scale-95 shadow-md">
+                <span class="text-2xl block mb-1">🥪</span>
+                <span class="text-xs font-medium">Ветчина сыр</span>
+            </button>
+            <!-- Кнопка 3 -->
+            <button onclick="sendCalc('Тесто пицца')" 
+                    class="p-3 bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 rounded-xl text-center transition-transform active:scale-95 shadow-md">
+                <span class="text-2xl block mb-1">🥖</span>
+                <span class="text-xs font-medium">Тесто пицца</span>
+            </button>
+            <!-- Кнопка 4 -->
+            <button onclick="sendCalc('Заливка')" 
+                    class="p-3 bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 rounded-xl text-center transition-transform active:scale-95 shadow-md">
+                <span class="text-2xl block mb-1">🍯</span>
+                <span class="text-xs font-medium">Заливка</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- БЛОК 3: Системные действия -->
+    <div class="space-y-3">
+        <button onclick="sendCommand('all_products')" 
+                class="w-full py-3 bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 transition-colors">
+            📋 Вывести всю базу продуктов
+        </button>
+    </div>
+
+    <!-- Логика взаимодействия с Telegram -->
+    <script>
+        // Инициализируем Telegram WebApp
+        const tg = window.Telegram.WebApp;
+        tg.expand(); // Расширяем окно на весь экран смартфона
+
+        // Настраиваем цвета кнопок под тему Telegram пользователя
+        tg.ready();
+
+        function sendSearch() {
+            const query = document.getElementById('searchQuery').value.strip();
+            if (query) {
+                // Отправляем структурированные данные обратно боту
+                tg.sendData(`search_${query}`);
+            } else {
+                tg.showAlert("Введите название товара для поиска!");
+            }
+        }
+
+        function sendCalc(ttkName) {
+            // Отправляем команду расчета ТТК обратно боту
+            tg.sendData(`calc_${ttkName}`);
+        }
+
+        function sendCommand(command) {
+            // Отправляем общую команду
+            tg.sendData(command);
+        }
+    </script>
+</body>
+</html>
